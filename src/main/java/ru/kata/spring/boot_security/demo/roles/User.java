@@ -78,4 +78,12 @@ public class User implements UserDetails {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
+    public boolean isEmpty() {
+        return false;
+    }
+
+    public UserDetails get() {
+        return null;
+    }
 }
