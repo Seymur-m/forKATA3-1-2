@@ -26,7 +26,7 @@ public class UserController {
     public String listUsers(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         User user = userService.loadUserByUsername(userDetails.getUsername());
         model.addAttribute("users", userService.findAll());
-        return "user-list";
+        return "users";
     }
 
     @GetMapping("/new")
