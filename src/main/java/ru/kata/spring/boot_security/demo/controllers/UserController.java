@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.demo.controllers;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping
 public class UserController {
 
     private final UserService userService;
@@ -22,10 +23,18 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
+    @GetMapping("/user")
     public String listUsers(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        User user = userService.loadUserByUsername(userDetails.getUsername());
+        UserDetails user = userService.loadUserByUsername(userDetails.getUsername());
         model.addAttribute("users", userService.findAll());
+        return "users";
+    }
+
+
+
+    @GetMapping("/admin")
+    public String forAdmin(@AuthenticationPrincipal User currentUser, Model model) {
+
         return "users";
     }
 
@@ -33,7 +42,7 @@ public class UserController {
     public String showFormForAdd(Model model) {
         User user = new User();
         model.addAttribute("user", user);
-        return "user-form";
+        return "add-user";
     }
 
     @PostMapping("/save")
