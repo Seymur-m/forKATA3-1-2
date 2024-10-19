@@ -27,14 +27,14 @@ public class UserController {
     public String listUsers(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         UserDetails user = userService.loadUserByUsername(userDetails.getUsername());
         model.addAttribute("users", userService.findAll());
-        return "users";
+        return "user";
     }
 
 
 
     @GetMapping("/admin")
     public String forAdmin(@AuthenticationPrincipal User currentUser, Model model) {
-
+        model.addAttribute("currentuser", currentUser);
         return "users";
     }
 
@@ -46,14 +46,11 @@ public class UserController {
     }
 
     @PostMapping("/save")
-    public String saveUser(@RequestParam("id") Long id, @RequestParam("username") String username, @RequestParam("password") String password) {
-        User user = new User();
-        user.setId(id);
-        user.setUsername(username);
-        user.setPassword(password);
+    public String saveUser(User user) {
         userService.save(user);
         return "redirect:/users";
     }
+
 
     @GetMapping("/edit")
     public String showFormForUpdate(@RequestParam("userId") Long id, Model model) {
@@ -63,10 +60,7 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    public String updateUser(@RequestParam("id") Long id, @RequestParam("username") String username, @RequestParam("password") String password) {
-        User user = userService.findById(id);
-        user.setUsername(username);
-        user.setPassword(password);
+    public String updateUser(User user) {
         userService.update(user);
         return "redirect:/users";
     }

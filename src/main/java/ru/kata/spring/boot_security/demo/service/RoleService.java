@@ -8,7 +8,7 @@ import java.util.List;
 
 
 @Service
-public class RoleService {
+public class RoleService implements  RoleServiceIntr{
 
     @Autowired
     private final RoleRepository roleRepository;
@@ -17,10 +17,13 @@ public class RoleService {
         this.roleRepository = roleRepository;
     }
 
+
+    @Override
     public void save(Role role) {
         roleRepository.saveAndFlush(role);
     }
 
+    @Override
     public void saveAll(List<Role> roles) {
         roleRepository.saveAllAndFlush(roles);
     }

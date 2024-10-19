@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
@@ -15,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService implements UserServiceIntr {
     private final UserRepository userRepository;
 
     @Autowired
@@ -23,22 +22,27 @@ public class UserService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+    @Override
     public List<User> findAll() {
         return userRepository.findAll();
     }
 
+    @Override
     public void save(User user) {
         userRepository.save(user);
     }
 
+    @Override
     public User findById(Long id) {
         return userRepository.findById(id).orElse(null);
     }
 
+    @Override
     public void update(User user) {
         userRepository.save(user);
     }
 
+    @Override
     public void delete(Long id) {
         userRepository.deleteById(id);
     }
