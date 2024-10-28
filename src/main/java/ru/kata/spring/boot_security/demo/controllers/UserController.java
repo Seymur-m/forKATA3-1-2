@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
 import java.util.ArrayList;
@@ -18,17 +17,13 @@ import java.util.List;
 
 @Controller
 public class UserController {
-    @Autowired
-    private UserServiceImpl userService;
 
-    @Autowired
-    private RoleService roleService;
     @Autowired
     private UserServiceImpl userServiceImpl;
 
     @GetMapping("/admin")
     public String forAdmin(@AuthenticationPrincipal User currentUser, Model model) {
-        model.addAttribute("listUsers", userService.findAll());
+        model.addAttribute("listUsers", userServiceImpl.findAll());
         model.addAttribute("user", new User());
         model.addAttribute("role", new Role());
         model.addAttribute("currentuser", currentUser);
@@ -37,7 +32,7 @@ public class UserController {
 
     @GetMapping("/user")
     public String forUser(@AuthenticationPrincipal User currentUser, Model model) {
-        User user = (User) userService.loadUserByUsername(currentUser.getUsername());
+        User user = (User) userServiceImpl.loadUserByUsername(currentUser.getUsername());
         model.addAttribute("currentuser", currentUser);
         return "user";
     }
@@ -54,13 +49,13 @@ public class UserController {
         List<Role> roles = new ArrayList<>();
         roles.add(role);
         user.setRoles(roles);
-        userService.saveUserWithRole(user);
+        userServiceImpl.saveUserWithRole(user);
         return "redirect:/admin/";
     }
 
     @PostMapping("/admin/delete")
     public String deleteUser(@RequestParam("id") Long id) {
-        userService.delete(id);
+        userServiceImpl.delete(id);
         return "redirect:/admin/";
     }
 
